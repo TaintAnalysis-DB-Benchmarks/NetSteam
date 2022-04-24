@@ -11,9 +11,13 @@ const {
 
 const router = express.Router();
 
+const { performance } = require('perf_hooks');
+
 router.get(
   "/video/:videoId",
   asyncHandler(async (req, res, next) => {
+    console.log('==================== getReviewsForVideo // start ====================');
+    const fnStart = performance.now();
     let reviews = await Review.findAll({
       where: { videoId: req.params.videoId },
       include: [
@@ -37,11 +41,16 @@ router.get(
       review.dataValues["totalCount"] = reviewCounts[i];
       reviewObj[review.dataValues.id] = review.dataValues;
     });
+    const fnEnd = performance.now();
+    console.log('====================  getReviewsForVideo // end  ====================');
+    console.log(fnEnd - fnStart);
     return await res.json({ reviewObj });
   })
 );
 
 router.post("/video/:videoId", async (req, res) => {
+  console.log('==================== postVideoReview // start ====================');
+  const fnStart = performance.now();
   const videoId = req.params.videoId;
   const { recommend, score, commentText, userId } = req.body;
   const review = await Review.create({
@@ -75,6 +84,9 @@ router.post("/video/:videoId", async (req, res) => {
       review.dataValues["totalCount"] = reviewCounts[i];
       reviewObj[review.dataValues.id] = review.dataValues;
     });
+    const fnEnd = performance.now();
+    console.log('====================  postVideoReview // end  ====================');
+    console.log(fnEnd - fnStart);
     return await res.json({ reviewObj });
   }
 });
@@ -82,6 +94,8 @@ router.post("/video/:videoId", async (req, res) => {
 router.post(
   "/:reviewId",
   asyncHandler(async (req, res, next) => {
+    console.log('==================== postReview // start ====================');
+    const fnStart = performance.now();
     const reviewId = req.params.reviewId;
     const { recommend, score, commentText, userId } = req.body;
     const review = await Review.findByPk(reviewId);
@@ -115,6 +129,9 @@ router.post(
       review.dataValues["totalCount"] = reviewCounts[i];
       reviewObj[review.dataValues.id] = review.dataValues;
     });
+    const fnEnd = performance.now();
+    console.log('====================  postReview // end  ====================');
+    console.log(fnEnd - fnStart);
     return await res.json({ reviewObj });
   })
 );
@@ -122,6 +139,8 @@ router.post(
 router.delete(
   "/:reviewId",
   asyncHandler(async (req, res, next) => {
+    console.log('==================== deleteReview // start ====================');
+    const fnStart = performance.now();
     const reviewId = req.params.reviewId;
     const { userId } = req.body;
     const review = await Review.findByPk(reviewId);
@@ -152,6 +171,9 @@ router.delete(
       review.dataValues["totalCount"] = reviewCounts[i];
       reviewObj[review.dataValues.id] = review.dataValues;
     });
+    const fnEnd = performance.now();
+    console.log('====================  deleteReview // end  ====================');
+    console.log(fnEnd - fnStart);
     return await res.json({ reviewObj, reviewId });
   })
 );
