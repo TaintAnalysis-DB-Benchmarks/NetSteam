@@ -62,7 +62,7 @@ module.exports = {
       let reviews = seedReviews();
       return queryInterface.bulkInsert("Reviews", reviews);
     } else {
-      const genThisTime = 10; // 10 or 100 or 1000
+      const genThisTime = 1000; // 10 or 100 or 1000
       const buildReview = () => {
         return {
             score : faker.datatype.number({min: 0, max: 1}),
