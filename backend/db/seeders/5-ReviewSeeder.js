@@ -1,7 +1,7 @@
 "use strict";
 const { faker } = require("@faker-js/faker");
 
-const mode = "deepDive";
+const mode = "basic";
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
